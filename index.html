@@ -59,9 +59,15 @@ body{
   opacity:0.7;
 }
 
-/* Pages */
-.page{display:none; animation:fadeIn .55s ease forwards;}
-.page.active{display:block;}
+/* ---- PAGES: ONLY ONE CAN SHOW ---- */
+.page{
+  display:none !important;     /* hard force hidden */
+  animation:fadeIn .55s ease forwards;
+}
+.page.active{
+  display:block !important;    /* only active shows */
+}
+
 @keyframes fadeIn{
   from{opacity:0;transform:translateY(10px);}
   to{opacity:1;transform:translateY(0);}
@@ -87,13 +93,13 @@ h2{
   line-height:1.25;
 }
 
-/* Page 1: stack content so button cannot overlap text */
+/* Page 1 layout */
 #page1{
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:18px;
-  min-height: 320px; /* makes the box bigger if needed */
+  min-height: 320px;
   justify-content:center;
 }
 
@@ -104,7 +110,6 @@ h2{
   max-width: 520px;
 }
 
-/* Continue button centered, but NOT layered on top */
 .bigBtn{
   display:inline-block;
   padding:16px 56px;
@@ -120,15 +125,14 @@ h2{
 }
 .bigBtn:hover{transform:translateY(-3px);}
 
-/* Buttons area boundary for Yes/No */
+/* Page 2 buttons boundary */
 .buttons{
   position:relative;
-  height:120px;
+  height:130px;
   margin-top: 10px;
   border-radius: 18px;
 }
 
-/* choice buttons */
 button.choice{
   position:absolute;
   border-radius:40px;
@@ -141,10 +145,10 @@ button.choice{
 }
 button.choice:active{transform:scale(.94);}
 
-/* YES twice as big */
+/* YES bigger */
 #yes{
   left:10%;
-  top: 40px;
+  top: 44px;
   padding:24px 72px;
   font-size:20px;
   background:linear-gradient(135deg,#ff4d6d,#ff758f);
@@ -156,7 +160,7 @@ button.choice:active{transform:scale(.94);}
 /* NO smaller */
 #no{
   left:58%;
-  top: 48px;
+  top: 52px;
   padding:12px 28px;
   font-size:15px;
   background:rgba(255,255,255,0.9);
@@ -237,6 +241,7 @@ button.choice:active{transform:scale(.94);}
 <audio id="yesSound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
 
 <script>
+const pages = Array.from(document.querySelectorAll(".page"));
 const page1 = document.getElementById("page1");
 const page2 = document.getElementById("page2");
 const page3 = document.getElementById("page3");
@@ -250,28 +255,27 @@ const hoverSound = document.getElementById("hoverSound");
 const yesSound   = document.getElementById("yesSound");
 
 function showPage(page){
-  [page1,page2,page3].forEach(p => p.classList.remove("active"));
+  pages.forEach(p => p.classList.remove("active"));
   page.classList.add("active");
 }
 
 continueBtn.addEventListener("click", () => {
   showPage(page2);
-  setTimeout(() => {
+  // reset no position when entering page2
+  requestAnimationFrame(() => {
     noBtn.style.left = "58%";
-    noBtn.style.top  = "48px";
-  }, 0);
+    noBtn.style.top  = "52px";
+  });
 });
 
 yesBtn.addEventListener("click", () => {
   yesSound.currentTime = 0;
   yesSound.play();
-
   confetti({ particleCount: 260, spread: 120, origin: { y: 0.65 } });
-
   setTimeout(() => showPage(page3), 450);
 });
 
-/* --- No button runs away but NEVER disappears (stays inside buttonsBox) --- */
+/* No button runs away but stays inside buttonsBox */
 function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
 
 function setNoPosition(x, y){
@@ -279,8 +283,7 @@ function setNoPosition(x, y){
   const w = noBtn.offsetWidth;
   const h = noBtn.offsetHeight;
 
-  const minX = 8;
-  const minY = 8;
+  const minX = 8, minY = 8;
   const maxX = boxRect.width  - w - 8;
   const maxY = boxRect.height - h - 8;
 
@@ -301,7 +304,6 @@ function flee(clientX, clientY){
 
   const RUN_RADIUS = 95;
   const JUMP = 150;
-
   if (dist > RUN_RADIUS) return;
 
   hoverSound.currentTime = 0;
@@ -315,6 +317,7 @@ function flee(clientX, clientY){
 
   setNoPosition(currentLeft + ux * JUMP, currentTop + uy * JUMP);
 
+  // if still too close, random safe spot
   const newRect = noBtn.getBoundingClientRect();
   const newCX = newRect.left + newRect.width/2;
   const newCY = newRect.top  + newRect.height/2;
@@ -344,7 +347,7 @@ noBtn.addEventListener("pointerdown", (e) => {
   setNoPosition(rx, ry);
 });
 
-/* floating hearts */
+/* Floating hearts */
 function createHeart(){
   const heart=document.createElement("div");
   heart.className="heart";
