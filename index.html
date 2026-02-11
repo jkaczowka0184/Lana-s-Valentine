@@ -30,8 +30,8 @@ body{
 }
 
 .card{
-  width:min(92%,420px);
-  padding:40px 30px 45px;
+  width:min(92%, 560px);
+  padding:48px 34px 52px;
   background:rgba(255,255,255,0.75);
   backdrop-filter:blur(18px);
   border-radius:28px;
@@ -60,10 +60,10 @@ body{
 }
 
 /* Pages */
-.page{display:none; animation:fadeIn .45s ease forwards;}
+.page{display:none; animation:fadeIn .55s ease forwards;}
 .page.active{display:block;}
 @keyframes fadeIn{
-  from{opacity:0;transform:translateY(8px);}
+  from{opacity:0;transform:translateY(10px);}
   to{opacity:1;transform:translateY(0);}
 }
 
@@ -72,7 +72,6 @@ body{
   margin-bottom:12px;
   animation:heartbeat 1.8s infinite;
 }
-
 @keyframes heartbeat{
   0%,100%{transform:scale(1);}
   25%{transform:scale(1.08);}
@@ -82,76 +81,82 @@ body{
 
 h2{
   font-family:"Playfair Display",serif;
-  font-size:26px;
+  font-size:34px;
   color:#4a1c2f;
-  margin-bottom:22px;
-  line-height:1.35;
+  margin-bottom:18px;
+  line-height:1.25;
 }
 
-/* PAGE 1 layout: guarantees button is visible */
-.page1Stack{
+/* Page 1: stack content so button cannot overlap text */
+#page1{
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:18px;
+  min-height: 320px; /* makes the box bigger if needed */
+  justify-content:center;
 }
 
-.page1Stack p{
-  font-size:16px;
-  line-height:1.5;
+.p1text{
+  font-size:20px;
+  line-height:1.55;
+  color:#2b2b2b;
+  max-width: 520px;
 }
 
-/* Continue button centered + always visible */
+/* Continue button centered, but NOT layered on top */
 .bigBtn{
   display:inline-block;
-  padding:16px 52px;
+  padding:16px 56px;
   border-radius:40px;
   border:none;
-  font-size:18px;
+  font-size:20px;
+  font-weight:500;
   cursor:pointer;
   background:linear-gradient(135deg,#ff4d6d,#ff758f);
   color:#fff;
   box-shadow:0 15px 35px rgba(255,77,109,0.55);
   transition:all .25s ease;
 }
-
 .bigBtn:hover{transform:translateY(-3px);}
-.bigBtn:active{transform:scale(.96);}
 
-/* Buttons area */
+/* Buttons area boundary for Yes/No */
 .buttons{
   position:relative;
-  height:120px;       /* more room so No can move without clipping */
-  margin-top:8px;
+  height:120px;
+  margin-top: 10px;
+  border-radius: 18px;
 }
 
-button{
+/* choice buttons */
+button.choice{
   position:absolute;
   border-radius:40px;
   border:none;
   cursor:pointer;
-  transition:transform .12s ease, box-shadow .25s ease;
+  transition:transform .15s ease, box-shadow .25s ease;
   box-shadow:0 10px 25px rgba(0,0,0,0.15);
   user-select:none;
+  touch-action: manipulation;
 }
-
-button:active{transform:scale(.94);}
+button.choice:active{transform:scale(.94);}
 
 /* YES twice as big */
 #yes{
   left:10%;
-  top:30px;
-  padding:24px 70px;
+  top: 40px;
+  padding:24px 72px;
   font-size:20px;
   background:linear-gradient(135deg,#ff4d6d,#ff758f);
   color:#fff;
   box-shadow:0 18px 45px rgba(255,77,109,.7);
 }
+#yes:hover{transform:translateY(-3px);}
 
 /* NO smaller */
 #no{
-  left:60%;
-  top:38px;
+  left:58%;
+  top: 48px;
   padding:12px 28px;
   font-size:15px;
   background:rgba(255,255,255,0.9);
@@ -159,8 +164,8 @@ button:active{transform:scale(.94);}
 }
 
 .hint{
-  margin-top:24px;
-  font-size:13px;
+  margin-top:22px;
+  font-size:14px;
   color:#6b6b6b;
   font-style:italic;
 }
@@ -172,17 +177,26 @@ button:active{transform:scale(.94);}
   animation:floatUp linear forwards;
   pointer-events:none;
 }
-
 @keyframes floatUp{
   from{transform:translateY(0) scale(1);opacity:1;}
   to{transform:translateY(-120vh) scale(1.8);opacity:0;}
 }
 
 .gif{
-  margin-top:18px;
+  margin-top:20px;
   width:100%;
   border-radius:20px;
   box-shadow:0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* Small screens */
+@media (max-width: 480px){
+  .card{ width:min(94%, 520px); padding:42px 22px 46px; }
+  h2{ font-size: 28px; }
+  .emoji{ font-size: 60px; }
+  .p1text{ font-size: 18px; }
+  #yes{ padding: 22px 58px; font-size: 18px; }
+  #no{ padding: 12px 24px; font-size: 14px; }
 }
 </style>
 </head>
@@ -193,11 +207,9 @@ button:active{transform:scale(.94);}
 
   <!-- PAGE 1 -->
   <div class="page active" id="page1">
-    <div class="page1Stack">
-      <h2>Hi my baby Lana Bear</h2>
-      <p>I love you so much❤️. I wanted to ask you a very important question</p>
-      <button class="bigBtn" id="continue">Continue</button>
-    </div>
+    <h2>Hi my baby Lana Bear</h2>
+    <p class="p1text">I love you so much❤️. I wanted to ask you a very important question</p>
+    <button class="bigBtn" id="continue">Continue</button>
   </div>
 
   <!-- PAGE 2 -->
@@ -205,9 +217,9 @@ button:active{transform:scale(.94);}
     <div class="emoji">😘❤️</div>
     <h2>Lana,<br>will you be my Valentine?</h2>
 
-    <div class="buttons" id="btnArea">
-      <button id="yes">Yes 💖</button>
-      <button id="no">No 🙈</button>
+    <div class="buttons" id="buttonsBox">
+      <button class="choice" id="yes">Yes 💖</button>
+      <button class="choice" id="no">No 🙈</button>
     </div>
 
     <div class="hint">You may find it hard to say no to me😊</div>
@@ -230,123 +242,121 @@ const page2 = document.getElementById("page2");
 const page3 = document.getElementById("page3");
 
 const continueBtn = document.getElementById("continue");
-const btnArea = document.getElementById("btnArea");
+const buttonsBox  = document.getElementById("buttonsBox");
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
 
 const hoverSound = document.getElementById("hoverSound");
-const yesSound = document.getElementById("yesSound");
+const yesSound   = document.getElementById("yesSound");
 
-continueBtn.onclick = () => {
-  page1.classList.remove("active");
-  page2.classList.add("active");
-  // reset No to a safe visible spot when entering page 2
-  placeNoAt(60, 38);
-};
+function showPage(page){
+  [page1,page2,page3].forEach(p => p.classList.remove("active"));
+  page.classList.add("active");
+}
+
+continueBtn.addEventListener("click", () => {
+  showPage(page2);
+  setTimeout(() => {
+    noBtn.style.left = "58%";
+    noBtn.style.top  = "48px";
+  }, 0);
+});
 
 yesBtn.addEventListener("click", () => {
   yesSound.currentTime = 0;
   yesSound.play();
 
-  confetti({
-    particleCount: 260,
-    spread: 120,
-    origin: { y: 0.65 }
-  });
+  confetti({ particleCount: 260, spread: 120, origin: { y: 0.65 } });
 
-  setTimeout(() => {
-    page2.classList.remove("active");
-    page3.classList.add("active");
-  }, 450);
+  setTimeout(() => showPage(page3), 450);
 });
 
-// --- No button movement (never disappears) ---
+/* --- No button runs away but NEVER disappears (stays inside buttonsBox) --- */
 function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
 
-function placeNoAt(leftPx, topPx){
-  const areaRect = btnArea.getBoundingClientRect();
+function setNoPosition(x, y){
+  const boxRect = buttonsBox.getBoundingClientRect();
   const w = noBtn.offsetWidth;
   const h = noBtn.offsetHeight;
 
-  const minX = 6;
-  const minY = 6;
-  const maxX = areaRect.width - w - 6;
-  const maxY = areaRect.height - h - 6;
+  const minX = 8;
+  const minY = 8;
+  const maxX = boxRect.width  - w - 8;
+  const maxY = boxRect.height - h - 8;
 
-  noBtn.style.left = clamp(leftPx, minX, maxX) + "px";
-  noBtn.style.top  = clamp(topPx,  minY, maxY) + "px";
+  noBtn.style.left = clamp(x, minX, maxX) + "px";
+  noBtn.style.top  = clamp(y, minY, maxY) + "px";
 }
 
-function randomNo(){
-  const areaRect = btnArea.getBoundingClientRect();
-  const w = noBtn.offsetWidth;
-  const h = noBtn.offsetHeight;
-
-  const x = 6 + Math.random() * (areaRect.width - w - 12);
-  const y = 6 + Math.random() * (areaRect.height - h - 12);
-  placeNoAt(x, y);
-}
-
-// Runs away when cursor gets close (smoother than only "mouseenter")
-const RUN_RADIUS = 90;
-const JUMP = 140;
-
-btnArea.addEventListener("pointermove", (e) => {
-  const areaRect = btnArea.getBoundingClientRect();
+function flee(clientX, clientY){
+  const boxRect = buttonsBox.getBoundingClientRect();
   const btnRect = noBtn.getBoundingClientRect();
 
-  const cursorX = e.clientX;
-  const cursorY = e.clientY;
+  const btnCX = btnRect.left + btnRect.width/2;
+  const btnCY = btnRect.top  + btnRect.height/2;
 
-  const btnCenterX = btnRect.left + btnRect.width / 2;
-  const btnCenterY = btnRect.top  + btnRect.height / 2;
-
-  const dx = btnCenterX - cursorX;
-  const dy = btnCenterY - cursorY;
+  const dx = btnCX - clientX;
+  const dy = btnCY - clientY;
   const dist = Math.hypot(dx, dy);
+
+  const RUN_RADIUS = 95;
+  const JUMP = 150;
 
   if (dist > RUN_RADIUS) return;
 
   hoverSound.currentTime = 0;
   hoverSound.play();
 
-  const ux = dist === 0 ? (Math.random() - 0.5) : dx / dist;
-  const uy = dist === 0 ? (Math.random() - 0.5) : dy / dist;
+  const ux = dist === 0 ? (Math.random()-0.5) : dx / dist;
+  const uy = dist === 0 ? (Math.random()-0.5) : dy / dist;
 
-  const currentLeft = btnRect.left - areaRect.left;
-  const currentTop  = btnRect.top  - areaRect.top;
+  const currentLeft = btnRect.left - boxRect.left;
+  const currentTop  = btnRect.top  - boxRect.top;
 
-  placeNoAt(currentLeft + ux * JUMP, currentTop + uy * JUMP);
+  setNoPosition(currentLeft + ux * JUMP, currentTop + uy * JUMP);
 
-  // If still too close after clamping, pick a random safe spot
   const newRect = noBtn.getBoundingClientRect();
-  const newCenterX = newRect.left + newRect.width / 2;
-  const newCenterY = newRect.top  + newRect.height / 2;
-  const newDist = Math.hypot(newCenterX - cursorX, newCenterY - cursorY);
-  if (newDist < RUN_RADIUS * 0.85) randomNo();
+  const newCX = newRect.left + newRect.width/2;
+  const newCY = newRect.top  + newRect.height/2;
+  const newDist = Math.hypot(newCX - clientX, newCY - clientY);
+
+  if (newDist < RUN_RADIUS * 0.9){
+    const w = noBtn.offsetWidth;
+    const h = noBtn.offsetHeight;
+    const rx = 8 + Math.random() * (boxRect.width  - w - 16);
+    const ry = 8 + Math.random() * (boxRect.height - h - 16);
+    setNoPosition(rx, ry);
+  }
+}
+
+buttonsBox.addEventListener("pointermove", (e) => {
+  if (!page2.classList.contains("active")) return;
+  flee(e.clientX, e.clientY);
 });
 
-// Mobile: if she taps No, it jumps (still stays visible)
 noBtn.addEventListener("pointerdown", (e) => {
   e.preventDefault();
-  hoverSound.currentTime = 0;
-  hoverSound.play();
-  randomNo();
+  const boxRect = buttonsBox.getBoundingClientRect();
+  const w = noBtn.offsetWidth;
+  const h = noBtn.offsetHeight;
+  const rx = 8 + Math.random() * (boxRect.width  - w - 16);
+  const ry = 8 + Math.random() * (boxRect.height - h - 16);
+  setNoPosition(rx, ry);
 });
 
-// Floating hearts
+/* floating hearts */
 function createHeart(){
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = Math.random() > 0.5 ? "❤️" : "💗";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = (Math.random() * 22 + 14) + "px";
-  heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
-  heart.style.opacity = (Math.random() * 0.5 + 0.4);
+  const heart=document.createElement("div");
+  heart.className="heart";
+  heart.innerHTML=Math.random()>0.5?"❤️":"💗";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.fontSize=(Math.random()*22+14)+"px";
+  heart.style.animationDuration=(Math.random()*3+4)+"s";
+  heart.style.opacity=(Math.random()*0.5+0.4);
   document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 8000);
+  setTimeout(()=>heart.remove(),8000);
 }
-setInterval(createHeart, 380);
+setInterval(createHeart,380);
 </script>
 
 </body>
