@@ -60,19 +60,8 @@ opacity:0.7;
 }
 
 /* Pages */
-.page{
-display:none;
-animation:fadeIn .6s ease forwards;
-}
-
-.page.active{
-display:block;
-}
-
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(10px);}
-to{opacity:1;transform:translateY(0);}
-}
+.page{display:none;}
+.page.active{display:block;}
 
 .emoji{
 font-size:68px;
@@ -91,18 +80,15 @@ h2{
 font-family:"Playfair Display",serif;
 font-size:26px;
 color:#4a1c2f;
-margin-bottom:24px;
+margin-bottom:30px;
 line-height:1.35;
 }
 
-/* Continue button centered */
 .bigBtn{
-display:block;
-margin:30px auto 0 auto;
-padding:16px 48px;
+padding:16px 42px;
 border-radius:40px;
 border:none;
-font-size:18px;
+font-size:17px;
 cursor:pointer;
 background:linear-gradient(135deg,#ff4d6d,#ff758f);
 color:#fff;
@@ -110,15 +96,12 @@ box-shadow:0 15px 35px rgba(255,77,109,0.55);
 transition:all .25s ease;
 }
 
-.bigBtn:hover{
-transform:translateY(-3px);
-}
+.bigBtn:hover{transform:translateY(-3px);}
 
 /* Buttons area */
 .buttons{
 position:relative;
-height:110px;
-margin-top:10px;
+height:95px;
 }
 
 button{
@@ -130,14 +113,12 @@ transition:all .25s ease;
 box-shadow:0 10px 25px rgba(0,0,0,0.15);
 }
 
-button:active{
-transform:scale(.94);
-}
+button:active{transform:scale(.94);}
 
 /* YES twice as big */
 #yes{
 left:10%;
-padding:24px 70px;
+padding:22px 60px;
 font-size:20px;
 background:linear-gradient(135deg,#ff4d6d,#ff758f);
 color:#fff;
@@ -189,9 +170,7 @@ box-shadow:0 15px 40px rgba(0,0,0,0.2);
 <!-- PAGE 1 -->
 <div class="page active" id="page1">
 <h2>Hi my baby Lana Bear</h2>
-<p style="margin-bottom:20px;">
-I love you so much❤️. I wanted to ask you a very important question
-</p>
+<p style="margin-bottom:30px;">I love you so much❤️. I wanted to ask you a very important question</p>
 <button class="bigBtn" id="continue">Continue</button>
 </div>
 
@@ -230,12 +209,8 @@ const card=document.querySelector(".card");
 const hoverSound=document.getElementById("hoverSound");
 const yesSound=document.getElementById("yesSound");
 
-continueBtn.onclick=()=>{
-page1.classList.remove("active");
-page2.classList.add("active");
-};
+continueBtn.onclick=()=>{page1.classList.remove("active");page2.classList.add("active");};
 
-/* No button stays inside card */
 noBtn.addEventListener("mouseenter",()=>{
 hoverSound.currentTime=0;
 hoverSound.play();
@@ -246,8 +221,11 @@ const btnRect=noBtn.getBoundingClientRect();
 const maxX=cardRect.width-btnRect.width-20;
 const maxY=cardRect.height-btnRect.height-20;
 
-noBtn.style.left=Math.random()*maxX+"px";
-noBtn.style.top=Math.random()*maxY+"px";
+let newX=Math.random()*maxX;
+let newY=Math.random()*maxY;
+
+noBtn.style.left=newX+"px";
+noBtn.style.top=newY+"px";
 });
 
 yesBtn.addEventListener("click",()=>{
